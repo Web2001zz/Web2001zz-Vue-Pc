@@ -1,6 +1,10 @@
 <template>
   <div>
-      Footer---
+     <footer>
+       <div>
+         
+       </div>
+     </footer>
   </div>
 </template>
 

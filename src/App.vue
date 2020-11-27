@@ -1,8 +1,7 @@
 <template>
-  <div class="App">
+  <div>
     <Header />
     <router-view></router-view>
-    <p>奥利安费</p>
     <Footer />
   </div>
 </template>
@@ -20,10 +19,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.App {
-  background: hotpink;
-  p {
-    background-color: skyblue;
-  }
-}
 </style>
