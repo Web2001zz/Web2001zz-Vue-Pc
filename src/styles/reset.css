@@ -75,3 +75,6 @@ a:link:hover{
     clear: both;
     visibility: hidden;
 }
+.clear-border {
+  border: none !important;
+}
