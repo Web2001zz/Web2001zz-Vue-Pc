@@ -1,12 +1,29 @@
 <template>
   <div class="Login">
-    <div class="Login-bgimg"></div>
+    <div class="Login-bgimg">
+      <div>
+        Login...
+        <button @click="login">登录</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { reqLogin } from "@api/user.js";
 export default {
   name: "Login",
+  methods: {
+    login() {
+      reqLogin("13700000000", "111111")
+        .then((res) => {
+          console.log("res", res);
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    },
+  },
 };
 </script>
 
