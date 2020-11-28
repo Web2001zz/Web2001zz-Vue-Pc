@@ -29,7 +29,12 @@
           /></router-link>
         </div>
         <div class="header-search">
-          <input type="text" value="请输入您需要搜索的商品" />
+          <input
+            type="text"
+            v-model="SearchName"
+            placeholder="请输入商品关键词"
+            @keyup.enter="search"
+          />
           <button @click="search">搜索</button>
         </div>
       </div>
@@ -40,11 +45,28 @@
 <script>
 export default {
   name: "Header",
-  methods:{
-    search(){
-      this.$router.push("/Search")
-    }
-  }
+  data() {
+    return {
+      SearchName: "",
+    };
+  },
+  methods: {
+    search() {
+      //编程时导航 将来要做搜索功能
+      const { SearchName } = this;
+
+      const location = {
+        name: "search",
+      };
+
+      if (SearchName) {
+        location.params = { SearchName };
+      }
+      this.$router.push(location);
+      //跳转后搜索框清空
+      this.SearchName = "";
+    },
+  },
 };
 </script>
 

@@ -1,10 +1,15 @@
 <template>
-  <div class="Search">Search区域</div>
+  <div class="Search">Search:"{{ searchName }}"区域</div>
 </template>
 
 <script>
 export default {
   name: "Search",
+  computed: {
+    searchName() {
+      return this.$route.path.slice("/");
+    },
+  },
 };
 </script>
 
