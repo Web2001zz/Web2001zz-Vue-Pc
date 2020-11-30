@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 //重写push和replce方法以解决冗余报错
-const push = VueRouter.prototype.push; 
+const push = VueRouter.prototype.push;
 const replace = VueRouter.prototype.replace;
 
 VueRouter.prototype.push = function(locations, onComplete) {
