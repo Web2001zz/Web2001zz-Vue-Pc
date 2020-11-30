@@ -1,8 +1,9 @@
 <template>
-  <div class="Search">Search:"{{ searchName }}"区域</div>
+  <div><TypeNav /></div>
 </template>
 
 <script>
+import TypeNav from "@comps/TypeNav";
 export default {
   name: "Search",
   computed: {
@@ -10,17 +11,12 @@ export default {
       return this.$route.path.slice("/");
     },
   },
+  components: {
+    TypeNav,
+  },
 };
 </script>
 
 <style lang="less" scoped>
-.Search {
-  width: 100%;
-  height: 700px;
-  font-size: 50px;
-  text-align: center;
-  line-height: 700px;
-  background-color: hotpink;
-}
 </style>
 

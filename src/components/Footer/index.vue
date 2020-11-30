@@ -109,7 +109,7 @@ footer {
     display: flex;
     justify-content: space-around;
     li {
-      border-right: 1px solid rgba(0,0,0,.4);
+      border-right: 1px solid rgba(0, 0, 0, 0.4);
       text-align: center;
       padding-right: 10px;
       margin-left: 10px;

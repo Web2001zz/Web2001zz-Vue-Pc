@@ -1,24 +1,36 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-//重写push和replce方法以解决冗余报错
+import Home from '../views/Home';
+import Login from '../views/Login';
+import Register from '../views/Register';
+import Search from '../views/Search';
+
+// 重写push和replace方法
+// 目的：为了让编程式导航重复点击时不报错~
 const push = VueRouter.prototype.push;
 const replace = VueRouter.prototype.replace;
 
-VueRouter.prototype.push = function(locations, onComplete) {
-	return push.call(this, locations, onComplete, () => {});
+VueRouter.prototype.push = function(location, onComplete, onAbort) {
+	// 如果用户想处理失败，就处理
+	if (onComplete && onAbort) {
+		return push.call(this, location, onComplete, onAbort);
+	}
+	// 如果用户不处理失败，给默认值：空函数
+	return push.call(this, location, onComplete, () => {});
 };
 
-VueRouter.prototype.replace = function(locations, onComplete) {
-	return replace.call(this, locations, onComplete, () => {});
+VueRouter.prototype.replace = function(location, onComplete, onAbort) {
+	// 如果用户想处理失败，就处理
+	if (onComplete && onAbort) {
+		return replace.call(this, location, onComplete, onAbort);
+	}
+	// 如果用户不处理失败，给默认值：空函数
+	return replace.call(this, location, onComplete, () => {});
 };
 
+// 安装插件
 Vue.use(VueRouter);
-
-import Home from '../view/Home';
-import Login from '../view/Login';
-import Register from '../view/Register';
-import Search from '../view/Search';
 
 export default new VueRouter({
 	routes: [
@@ -27,16 +39,24 @@ export default new VueRouter({
 			component: Home
 		},
 		{
-			path: '/Login',
-			component: Login
+			path: '/login',
+			component: Login,
+
+			meta: {
+				isFooterHide: true
+			}
 		},
 		{
-			path: '/Register',
-			component: Register
+			path: '/register',
+			component: Register,
+			meta: {
+				isFooterHide: true
+			}
 		},
 		{
+			// ?: 代表 params 参数是可选的
 			name: 'search',
-			path: '/Search/:SearchName?',
+			path: '/search/:searchText?',
 			component: Search
 		}
 	]

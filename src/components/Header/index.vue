@@ -31,7 +31,7 @@
         <div class="header-search">
           <input
             type="text"
-            v-model="SearchName"
+            v-model="SearchText"
             placeholder="请输入商品关键词"
             @keyup.enter="search"
           />
@@ -47,24 +47,21 @@ export default {
   name: "Header",
   data() {
     return {
-      SearchName: "",
+      SearchText: "",
     };
   },
   methods: {
     search() {
-      //编程时导航 将来要做搜索功能
-      const { SearchName } = this;
-
+      const { SearchText } = this;
       const location = {
         name: "search",
       };
-
-      if (SearchName) {
-        location.params = { SearchName };
+      if (SearchText) {
+        location.params = {
+          SearchText,
+        };
       }
       this.$router.push(location);
-      //跳转后搜索框清空
-      this.SearchName = "";
     },
   },
 };
@@ -148,4 +145,3 @@ header {
   }
 }
 </style>
-

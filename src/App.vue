@@ -2,18 +2,19 @@
   <div>
     <Header />
     <router-view></router-view>
-    <Footer />
+    <Footer v-if="!$route.meta.isFooterHide" />
   </div>
 </template>
 
 <script>
-import Footer from "./components/Footer";
-import Header from "./components/Header";
+import Header from "@comps/Header";
+import Footer from "@comps/Footer";
+
 export default {
   name: "App",
   components: {
-    Footer,
     Header,
+    Footer,
   },
 };
 </script>

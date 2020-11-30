@@ -1,13 +1,15 @@
-import request from '@utils/request';
+import request from "@utils/request";
 
 export const reqLogin = (phone, password) => {
-	//此处返回的应该是一个promise对象，请求完成后处理成功或失败状况
-	return request({
-		method: 'POST',
-		url: '/user/passport/login',
-		data: {
-			phone,
-			password
-		}
-	});
+  // 将request的返回值返回出去
+  // 外面可以接受到request返回值（promise对象），通过这个promise对象可以判断请求成功。失败
+  return request({
+    method: "POST",
+    url: "/user/passport/login",
+    data: {
+      // 放置请求体参数，通常post请求
+      phone,
+      password,
+    },
+  });
 };

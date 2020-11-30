@@ -1,15 +1,17 @@
+// @ts-nocheck
 import Vue from 'vue';
-import App from './App.vue';
-
-//引入全局样式
-import './styles/reset.css';
+import App from './App';
 
 import router from './router';
-import './plugins/element.js'
+import store from './store';
+
+import './styles/reset.css';
+import './plugins/element.js';
 
 Vue.config.productionTip = false;
 
 new Vue({
 	render: (h) => h(App),
-	router
+	router,
+	store
 }).$mount('#app');
