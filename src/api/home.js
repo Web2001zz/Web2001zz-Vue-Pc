@@ -11,7 +11,7 @@ export const reqGetBaseCategoryList = () => {
 	});
 };
 
-export const reqGetBenners = () => {
+export const reqGetBanners = () => {
 	return mockRequest({
 		method: 'GET',
 		url: '/banners'

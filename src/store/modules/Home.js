@@ -1,5 +1,5 @@
 // home组件的vuex状态
-import { reqGetBaseCategoryList, reqGetBenners } from '@api/home';
+import { reqGetBaseCategoryList, reqGetBanners } from '@api/home';
 
 export default {
 	state: {
@@ -16,8 +16,8 @@ export default {
 			commit('GET_CATEGORY_LIST', categoryList);
 		},
 
-		async getBenners({ commit }) {
-			const banners = await reqGetBenners();
+		async getBanners({ commit }) {
+			const banners = await reqGetBanners();
 			commit('GET_BANNERS', banners);
 		}
 	},
