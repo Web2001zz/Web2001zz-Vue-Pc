@@ -1,5 +1,5 @@
 <template>
-  <div class="swiper-container">
+  <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
       <div
         class="swiper-slide"
@@ -30,6 +30,28 @@ export default {
       required: true,
     },
   },
+  methods: {
+    initSwiper() {
+      this.swiper = new Swiper(this.$refs.swiper, {
+        loop: true, // 循环模式选项
+        autoplay: {
+          // 自动轮播
+          delay: 2000, // 轮播间隔时间
+          disableOnInteraction: false, // 当用户点击下一页时，仍会开启自动轮播
+        },
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    },
+  },
   watch: {
     carouselList() {
       // [] --> 最终的数据 数据发生变化才会触发
@@ -40,26 +62,14 @@ export default {
       // 确保：swiper不能new多次
       if (this.swiper) return;
       this.$nextTick(() => {
-        this.swiper = new Swiper(".swiper-container", {
-          loop: true, // 循环模式选项
-          autoplay: {
-            // 自动轮播
-            delay: 2000, // 轮播间隔时间
-            disableOnInteraction: false, // 当用户点击下一页时，仍会开启自动轮播
-          },
-          // 如果需要分页器
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-          },
-          // 如果需要前进后退按钮
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-        });
+        this.initSwiper();
       });
     },
+  },
+  mounted() {
+    //确保小轮播图的数据请求成功才会调用
+    if (!this.carouselList.length) return;
+    this.initSwiper();
   },
 };
 </script>
