@@ -134,6 +134,7 @@ header {
     height: 28px;
     width: 500px;
     border: 2px solid #ea4a36;
+    border-radius: 5px 0px 0px 5px;
   }
   button {
     height: 32px;
@@ -142,6 +143,7 @@ header {
     border: none;
     color: #fff;
     cursor: pointer;
+    border-radius: 0px 5px 5px 0px;
   }
 }
 </style>
