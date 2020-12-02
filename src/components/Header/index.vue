@@ -31,7 +31,7 @@
         <div class="header-search">
           <input
             type="text"
-            v-model="SearchText"
+            v-model="searchText"
             placeholder="请输入商品关键词"
             @keyup.enter="search"
           />
@@ -47,22 +47,38 @@ export default {
   name: "Header",
   data() {
     return {
-      SearchText: "",
+      searchText: "",
     };
   },
   methods: {
     search() {
-      const { SearchText } = this;
+      const { searchText } = this;
       const location = {
         name: "search",
       };
-      if (SearchText) {
+      if (searchText) {
         location.params = {
-          SearchText,
+          searchText,
         };
       }
-      this.$router.push(location);
+
+      const { categoryName } = this.$route.query;
+
+      if (categoryName) {
+        location.query = this.$route.query;
+      }
+      if (this.$route.name === "search") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
+  },
+  mounted() {
+    this.$bus.$on("clearKeyword", () => {
+      //清空searchText
+      this.searchText = "";
+    });
   },
 };
 </script>

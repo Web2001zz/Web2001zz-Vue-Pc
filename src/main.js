@@ -12,6 +12,10 @@ import './plugins/element.js';
 Vue.config.productionTip = false;
 
 new Vue({
+	beforeCreate() {
+		//定义全局事件总线对象
+		Vue.prototype.$bus = this;
+	},
 	render: (h) => h(App),
 	router,
 	store

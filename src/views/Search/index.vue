@@ -11,10 +11,16 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-show="options.keyword" @click="delKeyword">
+              {{ options.keyword }}<i>×</i>
+            </li>
+            <li
+              class="with-x"
+              v-show="options.categoryName"
+              @click="delCategory"
+            >
+              {{ options.categoryName }}<i>×</i>
+            </li>
           </ul>
         </div>
 
@@ -132,14 +138,87 @@ import TypeNav from "@comps/TypeNav";
 
 export default {
   name: "Search",
+  data() {
+    return {
+      options: {
+        category1Id: "",
+        category2Id: "",
+        category3Id: "",
+        categoryName: "",
+        keyword: "",
+        prder: "",
+        pageNo: 1,
+        pageSize: 5,
+        props: [],
+        trademark: "",
+      },
+    };
+  },
+  watch: {
+    //监视route属性，一旦发生变化则开始更新商品列表（不带参数）
+    $route() {
+      this.updateProductList();
+    },
+  },
   computed: {
     ...mapGetters(["goodsList"]),
   },
   methods: {
     ...mapActions(["getProductList"]),
+
+    //更新商品列表
+    updateProductList() {
+      const { searchText: keyword } = this.$route.params;
+      const {
+        categoryName,
+        category3Id,
+        category2Id,
+        category1Id,
+      } = this.$route.query;
+
+      const options = {
+        ...this.options,
+        keyword,
+        categoryName,
+        category3Id,
+        category2Id,
+        category1Id,
+      };
+
+      this.options = options;
+      //传参以更新商品列表
+      this.getProductList(options);
+    },
+
+    //删除关键字
+    delKeyword() {
+      this.options.keyword = "";
+      //利用全局事件总线删除关键词
+      this.$bus.$emit("clearKeyword");
+      //删除后重新发送请求
+      //不保存当前浏览器记录
+      this.$router.replace({
+        name: "search",
+        query: this.$route.query,
+      });
+    },
+
+    //删除商品分类
+    delCategory() {
+      this.options.categoryName = "";
+      this.options.category1Id = "";
+      this.options.category2Id = "";
+      this.options.category3Id = "";
+      //删除后还需要重新跳转一次
+      this.$router.replace({
+        name: "search",
+        params: this.$route.params,
+      });
+    },
   },
   mounted() {
-    this.getProductList();
+    //一上来发送请求回携带参数，解构赋值提取params中的searchtext属性重命名为keyword
+    this.updateProductList();
   },
   components: {
     TypeNav,
