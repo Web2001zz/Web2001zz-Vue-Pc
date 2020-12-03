@@ -8,7 +8,7 @@
             <h2>账户登录</h2>
           </div>
           <div class="Login-Login">
-            <input type="text" placeholder="输入您的手机号" v-model="user" />
+            <input type="text" placeholder="输入您的手机号" />
             <input type="password" placeholder="输入您的密码" />
           </div>
           <div class="Login-bottom">
@@ -94,8 +94,8 @@ export default {
     text-align: center;
   }
 }
-.Login-bottom{
-  width: 75% ;
+.Login-bottom {
+  width: 75%;
   margin: 0 auto;
 }
 button {

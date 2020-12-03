@@ -56,6 +56,8 @@ export default {
       const location = {
         name: "search",
       };
+
+      //通过params方法传参
       if (searchText) {
         location.params = {
           searchText,
@@ -75,6 +77,7 @@ export default {
     },
   },
   mounted() {
+    //全局事件总线，触发清除关键词函数
     this.$bus.$on("clearKeyword", () => {
       //清空searchText
       this.searchText = "";

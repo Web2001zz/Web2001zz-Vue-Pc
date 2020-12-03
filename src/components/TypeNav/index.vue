@@ -78,23 +78,31 @@ export default {
   name: "TypeNav",
   data() {
     return {
+      //当路由路径为/（home）时显示
       isHomeShow: this.$route.path === "/",
+      //在search组件默认不展开
       isSearchShow: false,
     };
   },
   computed: {
     ...mapState({
+      //获取三级分类数据
+      //categoryList就是组件能接收到的数据，其值是一个函数，内部还会调用并返回值
+      //调用时会将所有的vuex数据传递进去，即state
       categoryList: (state) => state.home.categoryList,
     }),
   },
   methods: {
     ...mapActions(["getCategoryList"]),
+    //跳转到search组件
     goSearch(e) {
+      //此处为了获取点击时传过来的参数， 获取给元素设定的自定义属性 data-xxx
       const { categoryname, categoryid, categorytype } = e.target.dataset;
+      //判断是否点中了a标签，点中了才能跳转
       if (!categoryname) return;
-      //隐藏分类列表
+      //点击后隐藏分类列表
       this.isSearchShow = false;
-
+      //开始传入跳转信息
       const location = {
         name: "search",
         query: {
@@ -102,7 +110,7 @@ export default {
           [`category${categorytype}Id`]: categoryid,
         },
       };
-
+      //输入的搜索关键字做parmas传参
       const { searchText } = this.$route.params;
 
       if (searchText) {
@@ -121,6 +129,7 @@ export default {
   mounted() {
     //在请求之前先判断vuex有没有数据
     if (this.categoryList.length) return;
+    //调用vuex的action函数发送请求
     this.getCategoryList();
   },
 };

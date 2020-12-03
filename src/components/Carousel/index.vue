@@ -1,4 +1,5 @@
 <template>
+  <!-- 轮播图通用组件 -->
   <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
       <div
@@ -19,25 +20,35 @@
 </template>
 
 <script>
+//引入Swiper
 import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
+//Swiper样式
 import "swiper/swiper-bundle.min.css";
+//Swiper6中需运用组件
 Swiper.use([Navigation, Pagination, Autoplay]);
+
 export default {
   name: "Carousel",
   props: {
+    //接收的轮播图数据是一个数组
+    //是一个必须要传的数据
     carouselList: {
       type: Array,
       required: true,
     },
   },
   methods: {
+    //Swiper的固定用法
     initSwiper() {
       this.swiper = new Swiper(this.$refs.swiper, {
-        loop: true, // 循环模式选项
+        // 循环模式选项
+        loop: true,
+        // 自动轮播
         autoplay: {
-          // 自动轮播
-          delay: 2000, // 轮播间隔时间
-          disableOnInteraction: false, // 当用户点击下一页时，仍会开启自动轮播
+          // 轮播间隔时间
+          delay: 2000,
+          // 当用户点击下一页时，仍会开启自动轮播
+          disableOnInteraction: false,
         },
         // 如果需要分页器
         pagination: {
@@ -54,13 +65,12 @@ export default {
   },
   watch: {
     carouselList() {
-      // [] --> 最终的数据 数据发生变化才会触发
+      // 最初的轮播图数据是一个[]，在请求到最终数据后才能进行Swiper
       // 轮播图DOM元素要渲染完成 --> 轮播图数据
       // watch为了确保有轮播图数据
-      // this.$nextTick为了确保轮播图数据已经渲染成DOM元素
-
       // 确保：swiper不能new多次
       if (this.swiper) return;
+      //为了确保轮播图数据已经渲染成DOM元素
       this.$nextTick(() => {
         this.initSwiper();
       });

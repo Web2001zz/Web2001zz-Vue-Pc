@@ -4,8 +4,8 @@ import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors } from '@api/home';
 export default {
 	state: {
 		categoryList: [], // 首页三级分类列表数据
-		banners: [],
-		floors: []
+		banners: [], // 首页轮播图数据
+		floors: []  // Home组件内的楼层数据
 	},
 	getters: {},
 	actions: {
@@ -18,6 +18,7 @@ export default {
 		},
 
 		async getBanners({ commit }) {
+			//发送请求
 			const banners = await reqGetBanners();
 			commit('GET_BANNERS', banners);
 		},
@@ -28,6 +29,7 @@ export default {
 		}
 	},
 	mutations: {
+		//mutations进行直接修改数据
 		GET_CATEGORY_LIST(state, categoryList) {
 			state.categoryList = categoryList;
 		},

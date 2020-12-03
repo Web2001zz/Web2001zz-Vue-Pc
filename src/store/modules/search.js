@@ -21,6 +21,10 @@ export default {
 		},
 		goodsList(state) {
 			return state.productList.goodsList;
+		},
+		//将total提取出来
+		total(state) {
+			return state.productList.total;			
 		}
 	},
 	actions: {
