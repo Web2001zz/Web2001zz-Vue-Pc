@@ -43,8 +43,21 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <!-- 先判断order中是否含有1，表示综合排序 -->
+                <li
+                  :class="{ active: options.order.indexOf('1') > -1 }"
+                  @click="setOrder('1')"
+                >
+                  <a
+                    >综合
+                    <i
+                      :class="{
+                        iconfont: true,
+                        'icon-direction-down': isAllDown,
+                        'icon-direction-up': !isAllDown,
+                      }"
+                    ></i>
+                  </a>
                 </li>
                 <li>
                   <a href="#">销量</a>
@@ -55,11 +68,28 @@
                 <li>
                   <a href="#">评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <!-- 先判断order中是否含有2，表示价格排序 -->
+                <li
+                  :class="{ active: options.order.indexOf('2') > -1 }"
+                  @click="setOrder('2')"
+                >
+                  <a href="#"
+                    >价格<span
+                      ><i
+                        :class="{
+                          iconfont: true,
+                          'icon-arrow-up-filling': true,
+                          upbutton: isPriceDown,
+                        }"
+                      ></i>
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-arrow-down-filling': true,
+                          upbutton: !isPriceDown,
+                        }"
+                      ></i></span
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -152,17 +182,19 @@ export default {
   data() {
     return {
       options: {
-        category1Id: "",
-        category2Id: "",
-        category3Id: "",
-        categoryName: "",
-        keyword: "",
-        prder: "",
-        pageNo: 1,
-        pageSize: 5,
-        props: [],
-        trademark: "",
+        category1Id: "", //一级分类ID
+        category2Id: "", //二级分类ID
+        category3Id: "", //三级分类ID
+        categoryName: "", //分类名称
+        keyword: "", //搜索关键词
+        pageNo: 1, //页码
+        pageSize: 5, //每页展示数量
+        props: [], //商品属性
+        trademark: "", //商品品牌
+        order: "1:desc", //排序
       },
+      isAllDown: true,
+      isPriceDown: false,
     };
   },
   watch: {
@@ -248,6 +280,38 @@ export default {
       this.options.props.splice(index, 1);
       this.updateProductList();
     },
+
+    //确认商品列表排序
+    setOrder(order) {
+      //order初始为综合排序:降序 1:desc
+      //综合排序 1   价格排序 2   升序asc,降序desc
+      //提取综合排序和升序降序 split冒号切割返回数组
+      let [orderNum, orderType] = this.options.order.split(":"); //1  desc
+      //判断点击的是第一次还是第二次，order不相等代表第一次，添加样式，相等代表第二次，修改图标
+      if (orderNum === order) {
+        //修改图标
+        if (order === "1") {
+          //修改综合排序的图标
+          this.isAllDown = !this.isAllDown;
+        } else {
+          //修改价格的图标
+          this.isPriceDown = !this.isPriceDown;
+        }
+        //修改升序降序
+        orderType = orderType === "desc" ? "asc" : "desc";
+      } else {
+        //修改样式
+        if (order === "1") {
+          orderType = this.isAllDown ? "desc" : "asc";
+        } else {
+          this.isPriceDown = false;
+          orderType = "asc";
+        }
+      }
+      console.log(orderNum, orderType);
+      this.options.order = `${order}:${orderType}`;
+      this.updateProductList();
+    },
   },
   mounted() {
     //一上来发送请求回携带参数，解构赋值提取params中的searchtext属性重命名为keyword
@@ -261,6 +325,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.upbutton {
+  color: rgb(238, 255, 0);
+}
 .main {
   margin: 10px 0;
 

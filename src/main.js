@@ -7,6 +7,7 @@ import store from './store';
 
 import './mock/mockServer';
 import './styles/reset.css';
+import './styles/iconfont.css';
 import './plugins/element.js';
 
 Vue.config.productionTip = false;
