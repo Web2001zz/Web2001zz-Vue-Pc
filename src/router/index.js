@@ -5,6 +5,7 @@ import Home from '../views/Home';
 import Login from '../views/Login';
 import Register from '../views/Register';
 import Search from '../views/Search';
+import Detail from '../views/Detail';
 
 // 重写push和replace方法
 // 目的：为了让编程式导航重复点击时不报错~
@@ -58,6 +59,15 @@ export default new VueRouter({
 			name: 'search',
 			path: '/search/:searchText?',
 			component: Search
+		},
+		{
+			name: 'detail',
+			path: '/detail/:id',
+			component: Detail
 		}
-	]
+	],
+	// 每次切换路由页面滚动条位置
+	scrollBehavior() {
+		return { x: 0, y: 0 };
+	}
 });
