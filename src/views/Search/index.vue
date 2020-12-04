@@ -137,24 +137,13 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
+          <Pagination
             :current-page="options.pageNo"
             :pager-count="7"
-            :page-sizes="[5, 10, 15, 20]"
             :page-size="5"
-            background
-            layout="
-              prev,
-              pager, 
-              next, 
-              total, 
-              sizes, 
-              jumper"
             :total="total"
-          >
-          </el-pagination>
+            @current-change="handleCurrentChange"
+          />
         </div>
       </div>
     </div>
@@ -165,6 +154,7 @@
 import SearchSelector from "./SearchSelector/SearchSelector";
 import { mapGetters, mapActions } from "vuex";
 import TypeNav from "@comps/TypeNav";
+import Pagination from "@comps/Pagination";
 
 export default {
   name: "Search",
@@ -193,13 +183,13 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["goodsList","total"]),
+    ...mapGetters(["goodsList", "total"]),
   },
   methods: {
     ...mapActions(["getProductList"]),
 
     //更新商品列表
-    updateProductList() {
+    updateProductList(pageNo = 1) {
       const { searchText: keyword } = this.$route.params;
       const {
         categoryName,
@@ -215,6 +205,7 @@ export default {
         category3Id,
         category2Id,
         category1Id,
+        pageNo,
       };
 
       this.options = options;
@@ -297,7 +288,6 @@ export default {
           orderType = "asc";
         }
       }
-      console.log(orderNum, orderType);
       this.options.order = `${order}:${orderType}`;
       this.updateProductList();
     },
@@ -312,6 +302,10 @@ export default {
     handleCurrentChange(pageNo) {
       this.updateProductList(pageNo);
     },
+    // 判断order以 xxx 开头
+    isOrder(order) {
+      return this.options.order.indexOf(order) > -1;
+    },
   },
   mounted() {
     //一上来发送请求回携带参数，解构赋值提取params中的searchtext属性重命名为keyword
@@ -320,6 +314,7 @@ export default {
   components: {
     TypeNav,
     SearchSelector,
+    Pagination,
   },
 };
 </script>

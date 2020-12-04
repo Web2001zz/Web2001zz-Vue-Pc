@@ -82,7 +82,7 @@ footer {
   height: 320px;
 }
 .footer-main {
-  width: 1100px;
+  width: 1200px;
   margin: 0 auto;
   .footer-top {
     display: flex;

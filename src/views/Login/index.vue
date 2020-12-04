@@ -15,7 +15,7 @@
             <input type="checkout" />自动登录
             <a href="####">忘记密码？</a>
             <el-button type="primary" @click="login">登录</el-button>
-            <a href="#">立即注册</a>
+            <router-link to="register">立即注册</router-link>
           </div>
         </div>
       </div>

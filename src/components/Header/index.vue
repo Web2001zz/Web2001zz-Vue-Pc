@@ -98,7 +98,7 @@ header {
   }
 }
 .header-topBG {
-  width: 1100px;
+  width: 1200px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -136,7 +136,7 @@ header {
   }
 }
 .header-main {
-  width: 1100px;
+  width: 1200px;
   margin: 0 auto;
   height: 100px;
   background: #fff;
