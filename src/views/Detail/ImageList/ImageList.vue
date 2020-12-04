@@ -1,12 +1,12 @@
 <template>
   <div class="swiper-container">
     <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <img
-          v-for="imgUrl in skuInfo.skuImageList"
-          :key="imgUrl.id"
-          :src="imgUrl.imgUrl"
-        />
+      <div
+        class="swiper-slide"
+        v-for="imgUrl in skuInfo.skuImageList"
+        :key="imgUrl.id"
+      >
+        <img :src="imgUrl.imgUrl" />
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -15,11 +15,39 @@
 </template>
 
 <script>
-/*  import Swiper from 'swiper' */
+import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
+import "swiper/swiper-bundle.min.css";
+Swiper.use([Navigation, Pagination, Autoplay]);
 export default {
   name: "ImageList",
   props: {
     skuInfo: Object,
+  },
+  mounted() {
+    this.$nextTick(() => {
+      if (!this.skuImageList.length) return;
+      new Swiper("swiper-container", {
+        // 循环模式选项
+        loop: true,
+        // 自动轮播
+        autoplay: {
+          // 轮播间隔时间
+          delay: 2000,
+          // 当用户点击下一页时，仍会开启自动轮播
+          disableOnInteraction: false,
+        },
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    });
   },
 };
 </script>
