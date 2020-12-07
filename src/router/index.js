@@ -67,11 +67,13 @@ export default new VueRouter({
 			component: Detail
 		},
 		{
+			// 命名路由
 			name: 'addcartsuccess',
 			path: '/addcartsuccess',
 			component: AddCartSuccess
 		},
 		{
+			// 命名路由
 			name: 'shopcart',
 			path: '/shopcart',
 			component: ShopCart

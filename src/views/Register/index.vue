@@ -177,6 +177,7 @@ export default {
         if (!isAgree) {
           //elementUI方法，弹出框
           this.$message("请同意用户协议！");
+          return;
         }
         if (password !== rePassword) {
           this.$message("两次输入密码不一致");

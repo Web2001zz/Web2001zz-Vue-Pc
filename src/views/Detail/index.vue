@@ -101,7 +101,12 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" value="1" />
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  value="1"
+                  v-model="skuNum"
+                />
                 <a href="javascript:" class="plus">+</a>
                 <a href="javascript:" class="mins">-</a>
               </div>
@@ -355,7 +360,7 @@ export default {
   data() {
     return {
       imageindex: 0, //传给大图的图片列表下标
-      skuNum: 1,
+      skuNum: 1, // 商品数量
     };
   },
   computed: {
@@ -367,16 +372,16 @@ export default {
     getImageindex(index) {
       this.imageindex = index;
     },
-
+    //加入购物车
     async addCart() {
       try {
         await this.updateCartCount({
-          skuId: this.skuId.id,
+          skuId: this.skuInfo.id,
           skuNum: this.skuNum,
         });
 
-        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
-      }catch(e){
+        this.$router.push("/addcartsuccess");
+      } catch (e) {
         console.log(e);
       }
     },

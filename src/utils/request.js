@@ -8,9 +8,14 @@
 */
 import axios from 'axios';
 import { Message } from 'element-ui';
+import getUserTempId from './getUserTempld';
+//引入store
+import store from '../store';
 // 引入进度条插件
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+
+const userTempId = getUserTempId();
 
 const instance = axios.create({
 	baseURL: '/api' // 公共的基础路径
@@ -20,6 +25,12 @@ const instance = axios.create({
 instance.interceptors.request.use((config) => {
 	// 开始进度条
 	NProgress.start();
+
+	const token = store.state.user.token;
+	if (token) {
+		config.headers.token = token;
+	}
+	config.headers.userTempId = userTempId;
 	return config;
 });
 // 设置响应拦截器

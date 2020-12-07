@@ -80,6 +80,7 @@
         </div>
       </div>
     </div>
+    <button @click="log">111</button>
   </div>
 </template>
 
@@ -88,17 +89,20 @@ import { mapState, mapActions } from "vuex";
 export default {
   name: "ShopCart",
   computed: {
+    //获取请求回来的购物车数据
     ...mapState({
       cartList: (state) => state.shopcart.cartList,
     }),
-    // 商品总数
+    //商品总数
     total() {
+      //筛选选中的商品并返回商品总数
       return this.cartList
         .filter((cart) => cart.isChecked === 1)
         .reduce((p, c) => p + c.skuNum, 0);
     },
-    // 商品总价
+    //商品总价
     totalPrice() {
+      //选中的商品数量乘选中的商品价钱返回商品总价
       return this.cartList
         .filter((cart) => cart.isChecked === 1)
         .reduce((p, c) => p + c.skuNum * c.skuPrice, 0);
@@ -106,15 +110,36 @@ export default {
   },
   methods: {
     ...mapActions(["getCartList", "updateCartCount"]),
-    // 更新商品数量
+    //限制输入商品数量
+    formatSkuNum(e) {
+      //获取输入的商品数量，正则校验将非数字替换为空字符
+      let skuNum = +e.target.value.replace(/\D+/g, "");
+      if (skuNum < 1) {
+        //商品的数量不能小于1
+        skuNum = 1;
+      } else if (skuNum > 10) {
+        //商品数量不能大于10
+        skuNum = 10;
+      }
+      e.target.value = skuNum;
+    },
+    log() {
+      console.dir(this.cartList);
+    },
+    //更新商品数据
+    update(skuId, skuNum, e) {
+      if (+e.target.value == skuNum) {
+        return;
+      }
+      this.updateCartCount({ skuId, skuNum: e.target.value - skuNum });
+    },
+
     async updateCount(skuId, skuNum) {
-      // 更新商品
       await this.updateCartCount({ skuId, skuNum });
-      // 刷新页面
-      // this.getCartList();
     },
   },
   mounted() {
+    //加载阶段请求数据
     this.getCartList();
   },
 };
