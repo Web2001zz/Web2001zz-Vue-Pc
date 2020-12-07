@@ -1,12 +1,12 @@
 <template>
-  <div class="swiper-container">
+  <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
       <div
         class="swiper-slide"
-        v-for="imgUrl in skuInfo.skuImageList"
+        v-for="(imgUrl, index) in skuImageList"
         :key="imgUrl.id"
       >
-        <img :src="imgUrl.imgUrl" />
+        <img :src="imgUrl.imgUrl" @click="getImageindex(index)" />
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -15,39 +15,31 @@
 </template>
 
 <script>
-import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
+import Swiper, { Navigation } from "swiper";
 import "swiper/swiper-bundle.min.css";
-Swiper.use([Navigation, Pagination, Autoplay]);
+Swiper.use([Navigation]);
 export default {
   name: "ImageList",
   props: {
-    skuInfo: Object,
+    skuImageList: Array,
+    getImageindex: Function,
   },
-  mounted() {
-    this.$nextTick(() => {
-      if (!this.skuImageList.length) return;
-      new Swiper("swiper-container", {
-        // 循环模式选项
-        loop: true,
-        // 自动轮播
-        autoplay: {
-          // 轮播间隔时间
-          delay: 2000,
-          // 当用户点击下一页时，仍会开启自动轮播
-          disableOnInteraction: false,
-        },
-        // 如果需要分页器
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
+  watch: {
+    //最开始的list并没有获取到，是一个空数组，为确保swiper在所有页面加载完成后使用所以用监事属性
+    skuImageList() {
+      this.$nextTick(() => {
+        new Swiper(this.$refs.swiper, {
+          slidesPerView: 5, // 每页显示轮播图的数量
+          spaceBetween: 30, // 轮播图间距
+          slidesPerGroup: 5, // 切换时切换轮播图的数量
+          // 如果需要前进后退按钮
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+        });
       });
-    });
+    },
   },
 };
 </script>

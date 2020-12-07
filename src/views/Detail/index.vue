@@ -16,9 +16,18 @@
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom :skuInfo="skuInfo" />
+          <Zoom
+            :imgUrl="
+              skuInfo &&
+              skuInfo.skuImageList[imageindex] &&
+              skuInfo.skuImageList[imageindex].imgUrl
+            "
+          />
           <!-- 小图列表 -->
-          <ImageList :skuInfo="skuInfo" />
+          <ImageList
+            :skuImageList="skuInfo.skuImageList"
+            :getImageindex="getImageindex"
+          />
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -96,7 +105,7 @@
                 <a href="javascript:" class="plus">+</a>
                 <a href="javascript:" class="mins">-</a>
               </div>
-              <div class="add">
+              <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -343,16 +352,40 @@ import Zoom from "./Zoom/Zoom";
 
 export default {
   name: "Detail",
+  data() {
+    return {
+      imageindex: 0, //传给大图的图片列表下标
+      skuNum: 1,
+    };
+  },
   computed: {
     ...mapGetters(["categoryView", "skuInfo", "spuSaleAttrList"]),
   },
   methods: {
-    ...mapActions(["getProductDetail"]),
+    ...mapActions(["getProductDetail", "updateCartCount"]),
+    //传给子组件调用，传入点击图片的下标给下标给大图
+    getImageindex(index) {
+      this.imageindex = index;
+    },
+
+    async addCart() {
+      try {
+        await this.updateCartCount({
+          skuId: this.skuId.id,
+          skuNum: this.skuNum,
+        });
+
+        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+      }catch(e){
+        console.log(e);
+      }
+    },
   },
   mounted() {
     //挂载阶段请求数据 传入商品id
     this.getProductDetail(this.$route.params.id);
   },
+
   components: {
     ImageList,
     Zoom,

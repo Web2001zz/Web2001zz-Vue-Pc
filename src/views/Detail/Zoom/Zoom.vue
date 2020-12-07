@@ -1,9 +1,9 @@
 <template>
-  <div class="spec-preview">
-    <img :src="skuInfo.skuDefaultImg" />
+  <div class="spec-preview" @mousemove="viewableZoom">
+    <img :src="imgUrl" />
     <div class="event"></div>
     <div class="big">
-      <img :src="skuInfo.skuDefaultImg" />
+      <img :src="imgUrl" />
     </div>
     <div class="mask"></div>
   </div>
@@ -13,7 +13,13 @@
 export default {
   name: "Zoom",
   props: {
-    skuInfo: Object,
+    imgUrl: String,
+  },
+  methods: {
+    //放大镜效果
+    viewableZoom(e) {
+      console.log(e);
+    },
   },
 };
 </script>
