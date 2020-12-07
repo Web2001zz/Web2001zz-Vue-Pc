@@ -5,7 +5,8 @@
       <h3>
         注册新用户
         <span class="go"
-          >我有账号，去 <a href="login.html" target="_blank">登陆</a>
+          >我有账号，去
+          <router-link to="/login">登陆</router-link>
         </span>
       </h3>
       <div class="content">
@@ -23,15 +24,17 @@
       </div>
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码" v-model="user.code" />
-        <!-- 请求的验证码图片 每次刷新都会发送请求，绑定点击事件让其点击的时候也会刷新验证码 -->
-        <img
-          ref="code"
-          src="http://182.92.128.115/api/user/passport/code"
-          alt="code"
-          @click="refresh"
-        />
-        <!--         <span class="error-msg">错误提示信息</span> -->
+        <ValidationProvider rules="code" v-slot="{ errors }">
+          <input type="text" placeholder="请输入验证码" v-model="user.code" />
+          <!-- 请求的验证码图片 每次刷新都会发送请求，绑定点击事件让其点击的时候也会刷新验证码 -->
+          <img
+            ref="code"
+            src="http://182.92.128.115/api/user/passport/code"
+            alt="code"
+            @click="refresh"
+          />
+          <span class="error-msg">{{ errors[0] }}</span>
+        </ValidationProvider>
       </div>
       <div class="content">
         <label>登录密码:</label>
@@ -64,12 +67,12 @@
         </ValidationProvider>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox" />
+        <input name="m1" type="checkbox" v-model="user.isAgree" />
         <span>同意协议并注册《尚品汇用户协议》</span>
-        <!-- <span class="error-msg">错误提示信息</span> -->
+        <span class="error-msg" v-show="!user.isAgree">请同意用户协议！</span>
       </div>
       <div class="btn">
-        <button @click="register">完成注册</button>
+        <button @click="submit">完成注册</button>
       </div>
     </div>
 
@@ -143,6 +146,14 @@ extend("rePassword", {
   message: "请保证确认密码一致",
 });
 
+//验证码不能为空
+extend("code", {
+  //内置规则，表示必须填写不能为空
+  ...required,
+  //需要返回的错误信息
+  message: "验证码不能为空",
+});
+
 export default {
   name: "Register",
   data() {
@@ -158,24 +169,34 @@ export default {
   },
   methods: {
     //注册
-    register() {
-      //收集表单数据
-      const { phone, code, password, rePassword, isAgree } = this.user;
-      //进行正则校验
-      if (!isAgree) {
-        //elementUI方法，弹出框
-        this.$message("请同意用户协议！");
+    async submit() {
+      try {
+        //收集表单数据
+        const { phone, code, password, rePassword, isAgree } = this.user;
+        //进行正则校验
+        if (!isAgree) {
+          //elementUI方法，弹出框
+          this.$message("请同意用户协议！");
+        }
+        if (password !== rePassword) {
+          this.$message("两次输入密码不一致");
+          return;
+        }
+        //发送请求注册
+        await this.$store.dispatch("register", { phone, password, code });
+        //请求成功后跳转到登陆界面
+        this.$router.push("/login");
+      } catch {
+        //请求失败清空密码验证码并刷新验证码
+        this.user.password = "";
+        this.user.rePassword = "";
+        this.user.code = "";
+        this.refresh();
       }
-      if (password !== rePassword) {
-        this.$message("两次输入密码不一致");
-        return;
-      }
-      console.log(phone, code, password, rePassword, isAgree);
-      //发送请求注册
     },
     //刷新验证码
-    refresh(e) {
-      e.target.src = "http://182.92.128.115/api/user/passport/code";
+    refresh() {
+      this.$refs.code.src = "http://182.92.128.115/api/user/passport/code";
     },
   },
   components: {
