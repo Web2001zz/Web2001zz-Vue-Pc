@@ -5,14 +5,18 @@
         <div class="header-topBG">
           <div class="header-top-left">
             <h2>尚品汇奥利给!</h2>
-            <p>
+            <p v-if="$store.state.user.name">
+              <span>您好：{{ $store.state.user.name }}</span>
+              <span>退出</span>
+            </p>
+            <p v-else>
               请 <router-link to="/Login">登录</router-link>
               <router-link to="/Register">免费注册</router-link>
             </p>
           </div>
           <ul class="header-top-right">
-            <li><a href="###">我的订单</a></li>
-            <li><a href="###">我的购物车</a></li>
+            <li><router-link to="/center">我的订单</router-link></li>
+            <li><router-link to="/shopcart">我的购物车</router-link></li>
             <li><a href="###">我的尚品汇</a></li>
             <li><a href="###">尚品汇会员</a></li>
             <li><a href="###">企业采购</a></li>

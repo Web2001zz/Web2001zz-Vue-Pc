@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import store from '../store';
 
 import Home from '../views/Home';
 import Login from '../views/Login';
@@ -38,7 +39,7 @@ VueRouter.prototype.replace = function(location, onComplete, onAbort) {
 // 安装插件
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
 	routes: [
 		{
 			path: '/',
@@ -112,3 +113,27 @@ export default new VueRouter({
 		return { x: 0, y: 0 };
 	}
 });
+
+//要求:在跳转到trade、pay、center页面之前 需要验证token
+// 需要权限才能访问的组件，声明一个数组以便未来的扩展性
+const permissionsList = [ '/trade', '/pay', '/center' ];
+
+//	因此需要使用到路由的导航守卫
+router.beforeEach((to, from, next) => {
+	console.log(to, from);
+	//to\from与$route类似，to是要跳转的组件，from是当前的页面
+	//都可以获取到params\query\meta\path等参数
+	//判断要跳转的页面是否需要权限访问（需要登录），如果不需要权限则直接跳转
+	if (permissionsList.indexOf(to.path) > -1) {
+		//如果有登录用的token则直接跳转,如果没有则跳转到login登录
+		if (store.state.user.token) {
+			return next();
+		} else {
+			next('/login');
+		}
+	} else {
+		next();
+	}
+});
+
+export default router;

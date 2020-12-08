@@ -3,8 +3,9 @@ import { reqRegister, reqLogin } from '@api/user';
 export default {
 	state: {
 		//请求回来的数据分别是name和token
-		name: '',
-		token: ''
+		//登录后 就要更新登陆后返回的token与name数据
+		name: localStorage.getItem('name') || '',
+		token: localStorage.getItem('token') || ''
 	},
 	getters: {},
 	actions: {
