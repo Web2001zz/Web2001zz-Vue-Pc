@@ -123,6 +123,7 @@ export default {
                 type: "success",
                 message: "成功!",
               });
+              this.$router.push("/paySuccess");
             })
             .catch(() => {
               this.$message({
